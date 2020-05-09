@@ -1,6 +1,5 @@
 export function PostData(type, userData) {
-    let BaseURL = 'https://api.thewallscript.com/restful/';
-    //let BaseURL = 'http://localhost/PHP-Slim-Restful/api/';
+    let BaseURL = 'localhost/';
 
     return new Promise((resolve, reject) =>{
     
