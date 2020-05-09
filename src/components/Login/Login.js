@@ -1,16 +1,17 @@
-import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom';
+import React, {Component} from 'react';
+import {Redirect} from 'react-router-dom';
+import {PostData} from '../../services/PostData';
 import './Login.css';
 
 class Login extends Component {
 
-  constructor() {
+  constructor(){
     super();
-
+   
     this.state = {
-      username: '',
-      password: '',
-      redirectToReferrer: false
+     username: '',
+     password: '',
+     redirectToReferrer: false
     };
 
     this.login = this.login.bind(this);
@@ -18,61 +19,49 @@ class Login extends Component {
 
   }
 
-
+  
 
   login() {
-    if (this.state.username && this.state.password) {
-      fetch('localhost/login', {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(this.state)
-      }).then(response => {
-
-      }).catch(error => {
-        console.log(error);
-      })
-      // PostData('login',this.state).then((result) => {
-      //  let responseJson = result;
-      //  if(responseJson.userData){         
-      //    sessionStorage.setItem('userData',JSON.stringify(responseJson));
-      //    this.setState({redirectToReferrer: true});
-      //  }
-
-      // });
+    if(this.state.username && this.state.password){
+      PostData('login',this.state).then((result) => {
+       let responseJson = result;
+       if(responseJson.userData){         
+         sessionStorage.setItem('userData',JSON.stringify(responseJson));
+         this.setState({redirectToReferrer: true});
+       }
+       
+      });
     }
+    
+   }
 
-  }
+  onChange(e){
+    this.setState({[e.target.name]:e.target.value});
+   }
 
-  onChange(e) {
-    this.setState({ [e.target.name]: e.target.value });
-  }
-
-
-
+  
+  
 
   render() {
 
-    if (this.state.redirectToReferrer) {
-      return (<Redirect to={'/home'} />)
+     if (this.state.redirectToReferrer) {
+      return (<Redirect to={'/home'}/>)
+    }
+   
+    if(sessionStorage.getItem('userData')){
+      return (<Redirect to={'/home'}/>)
     }
 
-    if (sessionStorage.getItem('userData')) {
-      return (<Redirect to={'/home'} />)
-    }
-
-    return (
+     return (
       <div className="row" id="Body">
         <div className="medium-5 columns left">
-          <h4>Login</h4>
-          <label>Username</label>
-          <input type="text" name="username" placeholder="Username" onChange={this.onChange} />
-          <label>Password</label>
-          <input type="password" name="password" placeholder="Password" onChange={this.onChange} />
-          <input type="submit" className="button success" value="Login" onClick={this.login} />
-          <a href="/signup">Registration</a>
+        <h4>Login</h4>
+        <label>Username</label>
+        <input type="text" name="username" placeholder="Username" onChange={this.onChange}/>
+        <label>Password</label>
+        <input type="password" name="password"  placeholder="Password" onChange={this.onChange}/>
+        <input type="submit" className="button success" value="Login" onClick={this.login}/>
+        <a href="/signup">Registration</a>
         </div>
       </div>
     );
